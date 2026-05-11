@@ -1,14 +1,14 @@
-package com.example.mcq_platform_api.service;
-import org.springframework.stereotype.Service;
+package com.example.mcq_platform_api.cache;
+import org.springframework.stereotype.Component;
 
-import com.example.mcq_platform_api.dto.AnswerResponse;
+import com.example.mcq_platform_api.dto.response.AnswerResponse;
 import com.example.mcq_platform_api.exception.ResourceNotFoundException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service
-public class AnswerCacheService {
+@Component
+public class AnswerCache {
 
 
     private final Map<String,AnswerResponse> answerCache = new ConcurrentHashMap<>();

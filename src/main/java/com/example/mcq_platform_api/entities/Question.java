@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,8 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = jakarta.persistence.CascadeType.ALL)
     private List<Option> options; 
+    
+    @ManyToMany(mappedBy = "questions", cascade = jakarta.persistence.CascadeType.ALL)
+    private List<PracticeSetItem> practiceSetItems;
     
 }

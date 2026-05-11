@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mcq_platform_api.dto.LoginRequest;
-import com.example.mcq_platform_api.dto.SignupRequest;
-import com.example.mcq_platform_api.dto.AuthResponse;
+import com.example.mcq_platform_api.dto.request.LoginRequest;
+import com.example.mcq_platform_api.dto.request.SignupRequest;
+import com.example.mcq_platform_api.dto.response.AuthResponse;
 import com.example.mcq_platform_api.entities.User;
 import com.example.mcq_platform_api.service.UserService;
 

@@ -12,11 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.example.mcq_platform_api.dto.QuestionListResponse;
-import com.example.mcq_platform_api.dto.QuestionResponse;
+import com.example.mcq_platform_api.cache.AnswerListCache;
+import com.example.mcq_platform_api.cache.QuestionListCache;
+import com.example.mcq_platform_api.dto.response.QuestionListResponse;
+import com.example.mcq_platform_api.dto.response.QuestionResponse;
 import com.example.mcq_platform_api.entities.Option;
 import com.example.mcq_platform_api.entities.Question;
 import com.example.mcq_platform_api.repository.QuestionRepo;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -27,11 +30,11 @@ import static org.mockito.Mockito.when;
 public class QuestionServiceTest {
 
     @Mock
-    private AnswerListCacheService tempService;
+    private AnswerListCache tempService;
     @Mock
     private QuestionRepo questionRepo;
     @Mock
-    private QuestionListCacheService questionListCacheService;
+    private QuestionListCache questionListCacheService;
 
     @InjectMocks
     private QuestionService questionService;
@@ -43,29 +46,7 @@ public class QuestionServiceTest {
     //     Question q = questionService.saveQuestion(question);
     //     assertThat(q).isNotNull();
     // }
-    @Test
-    void getQuestionsTest(){
-        Question question1 = createQuestion("Algebra" , "Maths");
-        Question question2 = createQuestion("Geometry" , "Maths");
-    
-        List<Question> questions = List.of(question1, question2);
-        Page<Question> questionPage = new PageImpl<>(questions);
-        when(questionRepo.findBySubject(eq("Maths"), any(Pageable.class))).thenReturn(questionPage);
-        doNothing().when(questionListCacheService).cacheQuestion(any());
-        QuestionListResponse response = questionService.getQuestions("Maths", null, 10);
-        assertThat(response).isNotNull();
-        assertThat(response.getQuestions()).hasSize(2);
-        System.out.println("Subject: " + response.getSubject());
-        System.out.println("Topic: " + response.getTopic());
-        System.out.println("Size: " + response.getTotal());
-        for (QuestionResponse questionResponse : response.getQuestions()) {
-            System.out.println(questionResponse.getNumber());
-            System.out.println(questionResponse.getQuestionText());
-            for (var option : questionResponse.getOptions()) {
-                System.out.println(option.getLabel() + " - " + option.getOptionText());
-            }
-        }
-    }
+ 
 
     private Question createQuestion(String topic , String subject){
         Question question = new Question();

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mcq_platform_api.dto.MessageResponse;
-import com.example.mcq_platform_api.dto.QuestionRequest;
-import com.example.mcq_platform_api.dto.QuestionUpdateRequest;
+import com.example.mcq_platform_api.dto.request.QuestionRequest;
+import com.example.mcq_platform_api.dto.request.QuestionUpdateRequest;
+import com.example.mcq_platform_api.dto.response.MessageResponse;
 import com.example.mcq_platform_api.exception.BadRequestException;
 import com.example.mcq_platform_api.service.QuestionService;
 

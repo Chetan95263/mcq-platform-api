@@ -16,9 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.example.mcq_platform_api.dto.OptionResponse;
-import com.example.mcq_platform_api.dto.QuestionListResponse;
-import com.example.mcq_platform_api.dto.QuestionResponse;
+import com.example.mcq_platform_api.dto.response.OptionResponse;
+import com.example.mcq_platform_api.dto.response.QuestionListResponse;
+import com.example.mcq_platform_api.dto.response.QuestionResponse;
 import com.example.mcq_platform_api.service.QuestionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

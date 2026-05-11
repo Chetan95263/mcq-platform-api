@@ -1,10 +1,9 @@
 package com.example.mcq_platform_api.entities;
 
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,7 @@ public class PracticeSet {
     private String subject;
     private String dateAndTime;   
 
-    @OneToMany(mappedBy = "practiceSet", cascade = jakarta.persistence.CascadeType.ALL)
-    private List<PracticeSetItem> practiceSetItems;  
+    @OneToOne(mappedBy = "practiceSet", cascade = jakarta.persistence.CascadeType.ALL)
+    private PracticeSetItem practiceSetItems;  
 } 
 

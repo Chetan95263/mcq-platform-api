@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mcq_platform_api.appconstants.Constant;
-import com.example.mcq_platform_api.dto.AnswerListResponse;
-import com.example.mcq_platform_api.dto.AnswerResponse;
-import com.example.mcq_platform_api.dto.QuestionListResponse;
-import com.example.mcq_platform_api.dto.QuestionResponse;
+import com.example.mcq_platform_api.cache.AnswerCache;
+import com.example.mcq_platform_api.cache.AnswerListCache;
+import com.example.mcq_platform_api.dto.response.AnswerListResponse;
+import com.example.mcq_platform_api.dto.response.AnswerResponse;
+import com.example.mcq_platform_api.dto.response.QuestionListResponse;
+import com.example.mcq_platform_api.dto.response.QuestionResponse;
 import com.example.mcq_platform_api.exception.ResourceNotFoundException;
-import com.example.mcq_platform_api.service.AnswerCacheService;
 import com.example.mcq_platform_api.service.QuestionService;
-import com.example.mcq_platform_api.service.AnswerListCacheService;
 
 
 @Controller
@@ -23,9 +23,9 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private AnswerCacheService answerCacheService;
+    private AnswerCache answerCacheService;
     @Autowired 
-    private AnswerListCacheService tempService;
+    private AnswerListCache tempService;
    
     @GetMapping("/questions")
     public ResponseEntity<QuestionListResponse> getQuestions(@RequestParam(required = false) String subject ,

@@ -12,12 +12,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.mcq_platform_api.dto.AnswerResponse;
-import com.example.mcq_platform_api.dto.OptionResponse;
-import com.example.mcq_platform_api.dto.QuestionListResponse;
-import com.example.mcq_platform_api.dto.QuestionRequest;
-import com.example.mcq_platform_api.dto.QuestionResponse;
-import com.example.mcq_platform_api.dto.QuestionUpdateRequest;
+import com.example.mcq_platform_api.cache.AnswerCache;
+import com.example.mcq_platform_api.cache.AnswerListCache;
+import com.example.mcq_platform_api.cache.QuestionListCache;
+import com.example.mcq_platform_api.dto.request.QuestionRequest;
+import com.example.mcq_platform_api.dto.request.QuestionUpdateRequest;
+import com.example.mcq_platform_api.dto.response.AnswerResponse;
+import com.example.mcq_platform_api.dto.response.OptionResponse;
+import com.example.mcq_platform_api.dto.response.QuestionListResponse;
+import com.example.mcq_platform_api.dto.response.QuestionResponse;
 import com.example.mcq_platform_api.entities.Option;
 import com.example.mcq_platform_api.entities.Question;
 import com.example.mcq_platform_api.exception.BadRequestException;
@@ -30,12 +33,12 @@ import jakarta.transaction.Transactional;
 @Service
 public class QuestionService {
 
-    private final AnswerListCacheService answerListCacheService;
-    private final AnswerCacheService answerCacheService;
+    private final AnswerListCache answerListCacheService;
+    private final AnswerCache answerCacheService;
     private final QuestionRepo questionRepo;
-    private final QuestionListCacheService questionListCacheService;
+    private final QuestionListCache questionListCacheService;
 
-    public QuestionService(AnswerListCacheService answerListCacheService , QuestionRepo questionRepo , AnswerCacheService answerCacheService , QuestionListCacheService questionListCacheService) {
+    public QuestionService(AnswerListCache answerListCacheService , QuestionRepo questionRepo , AnswerCache answerCacheService , QuestionListCache questionListCacheService) {
         this.questionRepo = questionRepo;
         this.answerListCacheService = answerListCacheService;
         this.answerCacheService = answerCacheService;
@@ -161,7 +164,6 @@ public class QuestionService {
         return answerResponse;
     }
     public QuestionListResponse getQuestions(String subject, String topic, int limit) {
-        System.out.println("\n\n" + subject + " " + topic + " " + limit + "\n\n");
         Pageable pageable = PageRequest.of(0, limit);
         Page<Question> questionPage;
 
@@ -169,7 +171,6 @@ public class QuestionService {
             questionPage = questionRepo.findBySubjectAndTopic(subject, topic, pageable);
         } 
         else if (subject != null) {
-            System.out.println("find by subject called");
             questionPage = questionRepo.findBySubject(subject, pageable);
         } 
         else if (topic != null) {
@@ -179,11 +180,12 @@ public class QuestionService {
             questionPage = questionRepo.findAll(pageable);
         }
         if(questionPage.getTotalElements() == 0) throw new ResourceNotFoundException("Question not found");
-        QuestionListResponse questionListResponse = mapToQuestionListResponse(questionPage.getContent(), subject, topic , limit);
-        questionListCacheService.cacheQuestion(questionListResponse);
+        QuestionListResponse questionListResponse = mapToQuestionListResponse(questionPage.getContent(), subject, topic );
+        questionListCacheService.cacheQuestion(questionListResponse.getSessionId(), questionPage.getContent());
+        questionListCacheService.cacheQuestionListResponse(questionListResponse.getSessionId(), questionListResponse);
         return questionListResponse;
     }
-    private QuestionListResponse mapToQuestionListResponse(List<Question> questions , String subject , String topic , int limit) {
+    public QuestionListResponse mapToQuestionListResponse(List<Question> questions , String subject , String topic) {
         List<QuestionResponse> response = new ArrayList<>();
         int number = 1;
         List<AnswerResponse> answers = new ArrayList<>();

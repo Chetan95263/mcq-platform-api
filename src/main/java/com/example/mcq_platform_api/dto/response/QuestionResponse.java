@@ -1,4 +1,4 @@
-package com.example.mcq_platform_api.dto;
+package com.example.mcq_platform_api.dto.response;
 
 import java.util.List;
 
