@@ -74,7 +74,7 @@ public class AuthController {
         user.setId(UUID.randomUUID().toString());
         user.setUsername(signupRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        user.setId("USER");
+        user.setRole("USER");
         userService.saveUser(user);
         return ResponseEntity.ok(new AuthResponse("Signup successful for user: ", user.getUsername()));
     }

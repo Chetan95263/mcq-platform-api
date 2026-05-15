@@ -1,5 +1,7 @@
 package com.example.mcq_platform_api.seeder;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ public class AdminSeeder implements CommandLineRunner {
         if(userRepo.findByUsername("admin").isEmpty()) {
 
             User admin = new User();
+            admin.setId(UUID.randomUUID().toString());
 
             admin.setUsername("admin");
 

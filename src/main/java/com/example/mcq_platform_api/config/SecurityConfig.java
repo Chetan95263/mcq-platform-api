@@ -38,7 +38,7 @@ public class SecurityConfig {
     	.requestMatchers(
         	HttpMethod.POST,
     	"/auth/signup",
-        			"/auth/login"
+        "/auth/login"
     	).permitAll()
 
     	.requestMatchers("/admin/**")
