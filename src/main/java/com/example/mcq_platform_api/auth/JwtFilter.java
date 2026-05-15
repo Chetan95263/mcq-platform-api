@@ -24,17 +24,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired 
     private CustomUserDetailService userDetailService;
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
              // Skip JWT check for public endpoints
             String path = request.getServletPath();
-            if (path.startsWith("/student/auth/")) {
+            if (path.startsWith("/auth/")) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            String header = request.getHeader("Authorization");
+            String header = request.getHeader("Token");
             
 
             if(header == null || !header.startsWith("Bearer ") ){

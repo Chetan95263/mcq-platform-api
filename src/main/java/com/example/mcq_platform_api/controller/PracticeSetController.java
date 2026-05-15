@@ -50,7 +50,6 @@ public class PracticeSetController {
     }
    @PostMapping("/{practiceSetId}/result")
     public ResponseEntity<PracticeSetResultResponse> getPracticeSetResult(@PathVariable String practiceSetId) {
-        
         return ResponseEntity.ok(practiceSetService.getResult(practiceSetId));
     }
 }

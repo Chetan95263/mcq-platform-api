@@ -28,14 +28,25 @@ public class SecurityConfig {
 
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
+	
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
 		    .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers(HttpMethod.POST, "/student/auth/signup","/student/auth/signin").permitAll()
-			    .anyRequest().authenticated()
-		    )
+
+    	.requestMatchers(
+        	HttpMethod.POST,
+    	"/auth/signup",
+        			"/auth/login"
+    	).permitAll()
+
+    	.requestMatchers("/admin/**")
+    	.hasRole("ADMIN")
+
+    	.anyRequest()
+    	.authenticated()
+)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	    return http.build();
@@ -50,7 +61,8 @@ public class SecurityConfig {
 	}
 	@Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(customUserDetailService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(customUserDetailService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
