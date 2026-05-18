@@ -38,6 +38,7 @@ and real-world backend practices in mind.
 ### Getting Started
 
 - [Project Overview](docs/01-project-overview.md)
+- [Tech Stack](docs/02-tech-stack.md)
 
 
 
