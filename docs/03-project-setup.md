@@ -1,0 +1,399 @@
+# Project Setup Guide
+
+## 1. Introduction
+
+This guide explains how to set up and run the `mcq_platform_api` project locally.
+
+The API provides:
+
+- Random MCQ practice questions
+- Timed practice sets
+- JWT authentication
+- Admin question management
+- Result evaluation system
+
+---
+
+## 2. Prerequisites
+
+Make sure the following are installed:
+
+| Software | Version |
+|----------|----------|
+| Java | 17+ |
+| Maven | 3.9+ |
+| MySQL | 8+ |
+| Git | Latest |
+
+Verify installation:
+
+```bash
+java -version
+mvn -version
+git --version
+```
+
+---
+
+## 3. Clone the Repository
+
+Clone the project from GitHub:
+
+```bash
+git clone <your-repository-url>
+cd mcq-platform-api
+```
+
+---
+
+## 4. Configure Database
+
+Create a MySQL database:
+
+```sql
+CREATE DATABASE mcq_platform_db;
+```
+
+Open:
+
+```txt
+src/main/resources/application.properties
+```
+
+Configure database connection:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/mcq_platform_db
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+jwt.secret=your_jwt_secret
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+Update credentials according to your local MySQL setup.
+
+---
+
+## 5. Install Dependencies
+
+Install Maven dependencies:
+
+```bash
+mvn clean install
+```
+
+This will:
+
+- Download dependencies
+- Compile project
+- Run tests
+- Build the application
+
+---
+
+## 6. Run the Project
+
+Start the Spring Boot server:
+
+```bash
+mvn spring-boot:run
+```
+
+Or run directly from IDE:
+
+```txt
+Run McqPlatformApiApplication.java
+```
+
+If successful:
+
+```txt
+Tomcat started on port 8080
+```
+
+API Base URL:
+
+```txt
+http://localhost:8080
+```
+
+---
+
+## 7. Authentication Setup
+
+Most protected endpoints require JWT authentication.
+
+### Register User
+
+**Endpoint**
+
+```http
+POST /auth/signup
+```
+
+Example Request:
+
+```json
+{
+  "username": "john123",
+  "password": "password123"
+}
+```
+
+---
+
+### Login User
+
+**Endpoint**
+
+```http
+POST /auth/login
+```
+
+Example Request:
+
+```json
+{
+  "username": "john123",
+  "password": "password123"
+}
+```
+
+Example Response:
+
+```json
+{
+  "token": "jwt_token_here",
+  "message": "Login successful",
+  "Username": "john123"
+}
+```
+
+Use this token in headers:
+
+```txt
+Token: Bearer YOUR_TOKEN
+```
+
+---
+
+## 8. Quick API Usage
+
+### Get Random Questions
+
+Generate random questions using filters.
+
+```http
+GET /questions?subject=math&topic=arithmetic&limit=2
+```
+
+
+Example Response:
+
+```json
+{
+  "sessionId": "1d8c7d00-86a3-4582-95d7-537148ab69b1",
+  "total": 2,
+  "subject": "math",
+  "topic": "arithmetic",
+  "questions": [
+    {
+      "number": 1,
+      "questionId": "1",
+      "questionText": "What is 2 + 2?",
+      "options": [
+        {
+          "label": "a",
+          "optionText": "3"
+        },
+        {
+          "label": "b",
+          "optionText": "4"
+        },
+        {
+          "label": "c",
+          "optionText": "5"
+        },
+        {
+          "label": "d",
+          "optionText": "6"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "questionId": "2",
+      "questionText": "What is 5 * 6?",
+      "options": [
+        {
+          "label": "a",
+          "optionText": "30"
+        },
+        {
+          "label": "b",
+          "optionText": "35"
+        },
+        {
+          "label": "c",
+          "optionText": "25"
+        },
+        {
+          "label": "d",
+          "optionText": "20"
+        }
+      ]
+    }
+  ]
+}
+```
+---
+
+### Get Question by ID
+
+```http
+GET /question/{id}
+```
+
+Example:
+
+```http
+GET /question/123
+```
+
+---
+
+### Get Answer by Question ID
+
+```http
+GET /question/{id}/answer
+```
+
+---
+
+### Get Session Answers
+
+Retrieve answers using session ID.
+
+```http
+GET /questions/{sessionId}/answer
+```
+
+---
+
+## 9. Practice Set APIs
+
+### Start Practice Set
+
+Generate timed practice session.
+
+```http
+POST /practice-set/start
+```
+
+---
+
+### Save Practice Set
+
+```http
+POST /practice-set/{practiceSetId}/save
+```
+
+---
+
+### Submit Answers
+
+Users can submit answers multiple times within time limit.
+
+Latest submitted answer is evaluated.
+
+```http
+POST /practice-set/{practiceSetId}/submit
+```
+
+---
+
+### Get Result
+
+Retrieve result anytime.
+
+Result includes:
+
+- Correct answers
+- Incorrect answers
+- Explanations
+- Evaluation summary
+
+```http
+POST /practice-set/{practiceSetId}/result
+```
+
+---
+
+## 10. Admin APIs
+
+Admin-only endpoints for question management.
+
+### Add Questions
+
+```http
+POST /admin/question
+```
+
+### Update Questions
+
+```http
+PUT /admin/question
+```
+
+### Delete Question
+
+```http
+DELETE /admin/question/{questionId}
+```
+
+---
+
+## 11. Testing
+
+Run tests:
+
+```bash
+mvn test
+```
+
+The project uses:
+
+- JUnit
+- Mockito
+- H2 Database (test environment)
+
+---
+
+## 12. Common Commands
+
+Run project:
+
+```bash
+mvn spring-boot:run
+```
+
+Build project:
+
+```bash
+mvn clean install
+```
+
+Run tests:
+
+```bash
+mvn test
+```
+
+Clean build:
+
+```bash
+mvn clean
+```

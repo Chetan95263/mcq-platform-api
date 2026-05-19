@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mcq_platform_api.appconstants.Constant;
 import com.example.mcq_platform_api.cache.AnswerCache;
@@ -18,7 +19,7 @@ import com.example.mcq_platform_api.exception.ResourceNotFoundException;
 import com.example.mcq_platform_api.service.QuestionService;
 
 
-@Controller
+@RestController
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
