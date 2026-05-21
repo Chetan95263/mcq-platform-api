@@ -350,13 +350,116 @@ Generate timed practice session.
 ```http
 POST /practice-set/start
 ```
-
+Example
+```http
+http://localhost:8080/practice-set/start
+```
+Extra Perimeter
+```json
+{
+    "time":"5"   
+} 
+```
+Response
+```json
+{
+  "time": "5",
+  "questionListResponse": {
+    "sessionId": "0dc07d35-f10e-49a3-8dc5-250ec78d07f5",
+    "total": 3,
+    "subject": "Mixed",
+    "topic": "Mixed",
+    "questions": [
+      {
+        "number": 1,
+        "questionId": "1",
+        "questionText": "What is 2 + 2?",
+        "options": [
+          {
+            "label": "a",
+            "optionText": "3"
+          },
+          {
+            "label": "b",
+            "optionText": "4"
+          },
+          {
+            "label": "c",
+            "optionText": "5"
+          },
+          {
+            "label": "d",
+            "optionText": "6"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "questionId": "2",
+        "questionText": "What is 5 * 6?",
+        "options": [
+          {
+            "label": "a",
+            "optionText": "30"
+          },
+          {
+            "label": "b",
+            "optionText": "35"
+          },
+          {
+            "label": "c",
+            "optionText": "25"
+          },
+          {
+            "label": "d",
+            "optionText": "20"
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "questionId": "3",
+        "questionText": "Capital of France?",
+        "options": [
+          {
+            "label": "a",
+            "optionText": "Madrid"
+          },
+          {
+            "label": "b",
+            "optionText": "Paris"
+          },
+          {
+            "label": "c",
+            "optionText": "Rome"
+          },
+          {
+            "label": "d",
+            "optionText": "Berlin"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Note: You can also add subject or topic or limit of question in JSON
 ---
 
 ### Save Practice Set
 
 ```http
 POST /practice-set/{practiceSetId}/save
+```
+Example
+```http
+Post http://localhost:8080/practice-set/0dc07d35-f10e-49a3-8dc5-250ec78d07f5/save 
+```
+Response
+```json
+{
+  "message":"Practice set saved successfully"
+}
 ```
 
 ---
@@ -369,6 +472,35 @@ Latest submitted answer is evaluated.
 
 ```http
 POST /practice-set/{practiceSetId}/submit
+```
+Example
+```http
+Post http://localhost:8080/practice-set/0dc07d35-f10e-49a3-8dc5-250ec78d07f5/submit 
+```
+Request
+```json
+{
+    "answers" : [
+        {
+            "questionId": "1",
+            "selectedOption": "b"
+        } ,
+        {
+            "questionId": "2",
+            "selectedOption": "b"
+        } ,
+        {
+            "questionId": "3",
+            "selectedOption": "b"
+        }
+    ]
+}
+```
+Response
+```json
+{
+  "message":"3 answers submitted successfully"
+}
 ```
 
 ---
@@ -386,6 +518,40 @@ Result includes:
 
 ```http
 POST /practice-set/{practiceSetId}/result
+```
+Example
+```http
+Post http://localhost:8080/practice-set/0dc07d35-f10e-49a3-8dc5-250ec78d07f5/result
+```
+
+Response
+```json
+{
+  "score": "2/3",
+  "practiceSetResultOverview": [
+    {
+      "status": "Correct Answer",
+      "questionText": "What is 2 + 2?",
+      "correctOption": "b",
+      "explanation": "+ operation will add numbers",
+      "correctOptionText": "4"
+    },
+    {
+      "status": "Wrong Answer",
+      "questionText": "What is 5 * 6?",
+      "correctOption": "a",
+      "explanation": "+ operation will add number",
+      "correctOptionText": "30"
+    },
+    {
+      "status": "Correct Answer",
+      "questionText": "Capital of France?",
+      "correctOption": "b",
+      "explanation": "it is a fact",
+      "correctOptionText": "Paris"
+    }
+  ]
+}
 ```
 
 ---
