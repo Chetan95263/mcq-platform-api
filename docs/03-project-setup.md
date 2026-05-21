@@ -195,7 +195,7 @@ Example Response:
 
 ```json
 {
-  "sessionId": "1d8c7d00-86a3-4582-95d7-537148ab69b1",
+  "sessionId": "88cb7f28-1904-4d44-8f05-79632135f9eb",
   "total": 2,
   "subject": "math",
   "topic": "arithmetic",
@@ -260,7 +260,33 @@ GET /question/{id}
 Example:
 
 ```http
-GET /question/123
+GET /question/1
+```
+Response
+```json
+{
+  "number": 1,
+  "questionId": "1",
+  "questionText": "What is 2 + 2?",
+  "options": [
+    {
+      "label": "a",
+      "optionText": "3"
+    },
+    {
+      "label": "b",
+      "optionText": "4"
+    },
+    {
+      "label": "c",
+      "optionText": "5"
+    },
+    {
+      "label": "d",
+      "optionText": "6"
+    }
+  ]
+}
 ```
 
 ---
@@ -269,6 +295,18 @@ GET /question/123
 
 ```http
 GET /question/{id}/answer
+```
+Example
+```http
+GET /question/1/answer
+```
+Response
+```json
+{
+  "questionId": "1",
+  "correctOption": "b",
+  "correctOptionText": "4"
+}
 ```
 
 ---
@@ -280,7 +318,27 @@ Retrieve answers using session ID.
 ```http
 GET /questions/{sessionId}/answer
 ```
-
+Example
+```http
+GET /questions/88cb7f28-1904-4d44-8f05-79632135f9eb/answer
+```
+Response
+```json
+{
+  "answers": [
+    {
+      "questionId": "1",
+      "correctOption": "b",
+      "correctOptionText": "4"
+    },
+    {
+      "questionId": "2",
+      "correctOption": "a",
+      "correctOptionText": "30"
+    }
+  ]
+}
+```
 ---
 
 ## 9. Practice Set APIs
