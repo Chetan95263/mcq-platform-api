@@ -562,8 +562,48 @@ Admin-only endpoints for question management.
 
 ### Add Questions
 
+
 ```http
 POST /admin/question
+```
+Example 
+```http
+Post http://localhost:8080/admin/question
+```
+Json Request
+```json
+[
+  {
+    "subject": "Mathematics",
+    "topic": "Algebra",
+    "questionText": "What is the value of x in 2x + 3 = 7?",
+    "options": [
+      {
+        "optionText": "1",
+        "isCorrect": false
+      },
+      {
+        "optionText": "2",
+        "isCorrect": true
+      },
+      {
+        "optionText": "3",
+        "isCorrect": false
+      },
+      {
+        "optionText": "4",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "2x + 3 = 7 → 2x = 4 → x = 2"
+  }
+]
+```
+Response
+```json
+{
+  "message":"1 Question Added Successfully!"
+}
 ```
 
 ### Update Questions
@@ -571,11 +611,57 @@ POST /admin/question
 ```http
 PUT /admin/question
 ```
+Example
+```http
+PUT http://localhost:8080/admin/question
+```
+Request
+```json
+[
+  {
+    "questionId": "b981494e-3d84-426d-baa1-6f8f43dd92e4",
+    "subject": "Mathematics",
+    "topic": "Algebra",
+    "questionText": "What is the value of x in 2x + 3 = 7?",
+    "options": [
+      {
+        "optionText": "1",
+        "isCorrect": false
+      },
+      {
+        "optionText": "2",
+        "isCorrect": true
+      },
+      {
+        "optionText": "3",
+        "isCorrect": false
+      },
+      {
+        "optionText": "4",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "If we put x = 2 , then we will get 7 on both side after evaluation"
+  }
+]
+```
+Response
+```json
+{"message":"Question Updated Successfully!"}
+```
 
 ### Delete Question
 
 ```http
 DELETE /admin/question/{questionId}
+```
+Example
+```http
+DELETE http://localhost:8080/admin/question/b981494e-3d84-426d-baa1-6f8f43dd92e4
+```
+Response
+```json
+{"message":"Question Deleted Successfully!"}
 ```
 
 ---

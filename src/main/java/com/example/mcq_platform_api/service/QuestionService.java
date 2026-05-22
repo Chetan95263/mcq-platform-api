@@ -57,8 +57,8 @@ public class QuestionService {
             // 1. Create Question 
             Question question = Question.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(qr.getSubject())   
-                .topic(qr.getTopic())
+                .subject(qr.getSubject().toLowerCase())   
+                .topic(qr.getTopic().toLowerCase())
                 .explanation(qr.getExplanation())
                 .questionText(qr.getQuestionText())
                 .build();
