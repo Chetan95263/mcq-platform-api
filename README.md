@@ -40,6 +40,7 @@ and real-world backend practices in mind.
 - [Project Overview](docs/01-project-overview.md)
 - [Tech Stack](docs/02-tech-stack.md)
 - [Setup Guide](docs/03-project-setup.md)
+- [Architecture](docs/04-project-architecture.md)
 
 
 
