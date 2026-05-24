@@ -41,6 +41,7 @@ and real-world backend practices in mind.
 - [Tech Stack](docs/02-tech-stack.md)
 - [Setup Guide](docs/03-project-setup.md)
 - [Architecture](docs/04-project-architecture.md)
+- [Database Design](docs/05-database-design.md)
 
 
 
