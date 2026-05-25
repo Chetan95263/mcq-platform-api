@@ -42,6 +42,7 @@ and real-world backend practices in mind.
 - [Setup Guide](docs/03-project-setup.md)
 - [Architecture](docs/04-project-architecture.md)
 - [Database Design](docs/05-database-design.md)
+- [API Documentation](docs/07-api-documentation.md)
 
 
 
