@@ -23,24 +23,23 @@ import com.example.mcq_platform_api.dto.response.AuthResponse;
 import com.example.mcq_platform_api.entities.User;
 import com.example.mcq_platform_api.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    @Autowired  
-    private UserService userService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
+    
+    private final JwtUtil jwtUtil;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         if(loginRequest.getUsername() == null || loginRequest.getPassword() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse("Username and password are required", null));
         }
@@ -50,12 +49,8 @@ public class AuthController {
         );
         
         String token = jwtUtil.generateToken(auth.getName());
-        return ResponseEntity.ok(Map.of(
-            "token",token,
-            "message" , "Login successful",
-            "Username" , loginRequest.getUsername()
-        )
-        );
+        return ResponseEntity.ok(new AuthResponse("Login successful", token));
+
     }catch(BadCredentialsException e){
         return ResponseEntity.status(401).body(new AuthResponse("Invalid username or password", null));
     }
