@@ -63,8 +63,8 @@ POST /auth/signup
 
 ```json
 {
-  "message": "Signup successful for user:",
-  "data": "john123"
+  "message":"Signup successful for user: ",
+  "username":"john123"
 }
 ```
 
