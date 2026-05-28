@@ -1,13 +1,12 @@
 package com.example.mcq_platform_api.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
+@Builder
 public class AuthResponse {
     private String message;
+    private String token;
     private String username;
 }

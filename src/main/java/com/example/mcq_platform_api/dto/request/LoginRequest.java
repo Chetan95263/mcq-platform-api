@@ -1,14 +1,15 @@
 package com.example.mcq_platform_api.dto.request;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
 
-@Getter
-@Setter
+
+@Data
 public class LoginRequest {
-    @NonNull
+
+    @NotBlank(message = "Username is required")
     private String username;
-    @NonNull
+    
+    @NotBlank(message = "Password is required")
     private String password;
 }

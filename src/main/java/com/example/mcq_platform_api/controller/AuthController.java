@@ -1,76 +1,39 @@
 package com.example.mcq_platform_api.controller;
 
-import java.util.Map;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.mcq_platform_api.auth.JwtUtil;
 import com.example.mcq_platform_api.dto.request.LoginRequest;
 import com.example.mcq_platform_api.dto.request.SignupRequest;
 import com.example.mcq_platform_api.dto.response.AuthResponse;
-import com.example.mcq_platform_api.entities.User;
-import com.example.mcq_platform_api.service.UserService;
+import com.example.mcq_platform_api.service.AuthService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
-    
-    private final UserService userService;
-    
-    private final JwtUtil jwtUtil;
-
-    private final PasswordEncoder passwordEncoder;
-
-    private final AuthenticationManager authenticationManager;
+public class AuthController {    
+    private final AuthService authService;    
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        if(loginRequest.getUsername() == null || loginRequest.getPassword() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse("Username and password are required", null));
-        }
-       try{
-        Authentication auth = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
-        
-        String token = jwtUtil.generateToken(auth.getName());
-        return ResponseEntity.ok(new AuthResponse("Login successful", token));
-
-    }catch(BadCredentialsException e){
-        return ResponseEntity.status(401).body(new AuthResponse("Invalid username or password", null));
-    }
-
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        String token = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+        return ResponseEntity.ok( AuthResponse.builder()
+                .message("Login successful")
+                .token(token)
+                .build());
     }
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signup(@RequestBody SignupRequest signupRequest) {
-        if(signupRequest.getUsername() == null || signupRequest.getPassword() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse("Username and password are required", null));
-        }
-        var existingUser = userService.findByUsername(signupRequest.getUsername());
-        if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new AuthResponse("Username already taken", null));
-        }
-        User user = new User();
-        user.setId(UUID.randomUUID().toString());
-        user.setUsername(signupRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        user.setRole("USER");
-        userService.saveUser(user);
-        return ResponseEntity.ok(new AuthResponse("Signup successful for user: ", user.getUsername()));
+    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignupRequest signupRequest) {
+        authService.register(signupRequest.getUsername(), signupRequest.getPassword());
+        return ResponseEntity.status(HttpStatus.CREATED).body( AuthResponse.builder()
+                .message("Signup successful")
+                .username(signupRequest.getUsername())
+                .build());
     }
 }
