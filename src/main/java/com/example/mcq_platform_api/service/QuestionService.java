@@ -168,13 +168,13 @@ public class QuestionService {
         Page<Question> questionPage;
 
         if (subject != null && topic != null) {
-            questionPage = questionRepo.findBySubjectAndTopic(subject, topic, pageable);
+            questionPage = questionRepo.findBySubjectAndTopic(subject.toLowerCase(), topic.toLowerCase(), pageable);
         } 
         else if (subject != null) {
             questionPage = questionRepo.findBySubject(subject, pageable);
         } 
         else if (topic != null) {
-            questionPage = questionRepo.findByTopic(topic, pageable);
+            questionPage = questionRepo.findByTopic(topic.toLowerCase(), pageable);
         } 
         else {
             questionPage = questionRepo.findAll(pageable);

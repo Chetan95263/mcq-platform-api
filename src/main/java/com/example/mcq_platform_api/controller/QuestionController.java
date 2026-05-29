@@ -18,25 +18,21 @@ import com.example.mcq_platform_api.dto.response.QuestionResponse;
 import com.example.mcq_platform_api.exception.ResourceNotFoundException;
 import com.example.mcq_platform_api.service.QuestionService;
 
+import lombok.RequiredArgsConstructor;
+
 
 @RestController
+@RequiredArgsConstructor
 public class QuestionController {
-    @Autowired
-    private QuestionService questionService;
-    @Autowired
-    private AnswerCache answerCacheService;
-    @Autowired 
-    private AnswerListCache tempService;
+    
+    private final QuestionService questionService;
+    private final AnswerCache answerCacheService;
+    private final AnswerListCache tempService;
    
     @GetMapping("/questions")
     public ResponseEntity<QuestionListResponse> getQuestions(@RequestParam(required = false) String subject ,
         @RequestParam(required = false) String topic , @RequestParam(defaultValue = Constant.DEFAULT_QUESTION_LIMIT) int limit) {
-        if(subject != null){
-            subject = subject.toLowerCase();
-        }
-        if(topic != null){
-            topic = topic.toLowerCase();
-        }
+      
         QuestionListResponse response = questionService.getQuestions(subject, topic, limit);
         return ResponseEntity.ok(response);
 
