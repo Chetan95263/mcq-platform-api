@@ -1,11 +1,9 @@
 package com.example.mcq_platform_api.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class AnswerResponse {
     private String questionId;

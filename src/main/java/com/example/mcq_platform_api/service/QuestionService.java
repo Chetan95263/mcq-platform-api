@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -186,55 +187,94 @@ public class QuestionService {
         return questionListResponse;
     }
     public QuestionListResponse mapToQuestionListResponse(List<Question> questions , String subject , String topic) {
-        List<QuestionResponse> response = new ArrayList<>();
-        int number = 1;
-        List<AnswerResponse> answers = new ArrayList<>();
-        for (Question question : questions) {
-            QuestionResponse questionResponse = new QuestionResponse();
-            questionResponse.setNumber(number++);
-            questionResponse.setQuestionId(question.getId());
-            questionResponse.setQuestionText(question.getQuestionText());
-            List <OptionResponse> optionResponses = new ArrayList<>();
-            char c = 'a';
-            for(Option option : question.getOptions()){
-                OptionResponse optionResponse = new OptionResponse();
-                optionResponse.setLabel(c);
-                optionResponse.setOptionText(option.getOptionText());
-                optionResponses.add(optionResponse);
-                if(option.isCorrect()){
-                    answers.add(new AnswerResponse(question.getId(), c, option.getOptionText()));
-                }
-                c++;
-            }
-            questionResponse.setOptions(optionResponses);
-            response.add(questionResponse);
-        }    
-        QuestionListResponse listResponse = new QuestionListResponse();
-        listResponse.setQuestions(response);
-        listResponse.setSubject(subject);
-        listResponse.setTopic(topic);
+        List<QuestionResponse> responses =
+            IntStream.range(0, questions.size())
+                    .mapToObj(i -> mapToQuestionResponse(questions.get(i) , i + 1) )
+                    .toList();
+
+        List<AnswerResponse> answers =
+            questions.stream()
+                    .flatMap(question -> extractAnswers(question).stream() )
+                    .toList();
+
+        QuestionListResponse listResponse =
+            new QuestionListResponse();
+
+        listResponse.setQuestions(responses);
         listResponse.setTotal(questions.size());
-        listResponse.setSessionId(answerListCacheService.createSession(answers));
 
-        if(subject != null && !questions.isEmpty() && topic != null){
-            listResponse.setSubject(subject);
-            listResponse.setTopic(topic);
-        }
+            listResponse.setSessionId(
+                answerListCacheService
+                    .createSession(answers)
+        );
 
-        else if(subject == null && !questions.isEmpty() && topic != null){
-            listResponse.setSubject(questions.get(0).getSubject());
-            listResponse.setTopic(topic);
-        }
-        
-        else if(subject != null && !questions.isEmpty() && topic == null){
-            listResponse.setSubject(subject);
-            listResponse.setTopic("Mixed");
-        }
-        else{
-            listResponse.setSubject("Mixed");
-            listResponse.setTopic("Mixed");
-        }
+        // Subject logic
+        String finalSubject =
+            subject != null
+                    ? subject
+                    : topic != null
+                        ? questions.get(0)
+                                .getSubject()
+                        : "Mixed";
+
+        // Topic logic
+        String finalTopic =
+            topic != null
+                    ? topic
+                    : "Mixed";
+
+        listResponse.setSubject(finalSubject);
+        listResponse.setTopic(finalTopic);
+
         return listResponse;
+    }
+    private QuestionResponse mapToQuestionResponse(Question question , int number){
+        QuestionResponse questionResponse = new QuestionResponse();
+        questionResponse.setQuestionId(question.getId());
+        questionResponse.setQuestionText(question.getQuestionText());
+        questionResponse.setNumber(number);
+        List<OptionResponse> optionResponses =
+            IntStream.range(0, question.getOptions().size())
+                    .mapToObj(i ->
+                            mapToOptionResponse(
+                                    question.getOptions().get(i),
+                                    getLabel(i)
+                            )
+                    )
+                    .toList();
+        
+        questionResponse.setOptions(optionResponses);
+        return questionResponse;
+    }
+    private OptionResponse mapToOptionResponse(Option option, char label){
+        OptionResponse optionResponse = new OptionResponse();
+        optionResponse.setLabel(label);
+        optionResponse.setOptionText(option.getOptionText());
+        return optionResponse;
+    }
+    private List<AnswerResponse> extractAnswers(Question question) {
+        return IntStream.range(
+                    0,
+                    question.getOptions().size()
+            )
+            .filter(i ->
+                    question.getOptions()
+                            .get(i)
+                            .isCorrect()
+            )
+            .mapToObj(i ->
+                    new AnswerResponse(
+                            question.getId(),
+                            getLabel(i),
+                            question.getOptions()
+                                    .get(i)
+                                    .getOptionText()
+                    )
+            )
+            .toList();
+    }
+    private char getLabel(int index) {
+        return (char) ('a' + index);
     }
 
 }
