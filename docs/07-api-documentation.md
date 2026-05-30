@@ -122,24 +122,107 @@ GET /questions
 ### Example Request
 
 ```http
-GET /questions?subject=java&topic=oops&limit=10
+GET /questions
 ```
 
 ### Success Response
 
 ```json
 {
-  "sessionId": "practice-session-id",
+  "sessionId": "7e89c5ed-89fd-4ac6-ba24-ce81f75bdcc4",
+  "total": 4,
+  "subject": "Mixed",
+  "topic": "Mixed",
   "questions": [
     {
-      "id": "question-id",
-      "questionText": "What is polymorphism?",
-      "subject": "java",
-      "topic": "oops",
+      "number": 1,
+      "questionId": "07441520-b467-4d04-ac43-0a08f320d486",
+      "questionText": "What is the value of x in 2x + 3 = 7?",
       "options": [
         {
-          "id": "option-id",
-          "optionText": "Option A"
+          "label": "a",
+          "optionText": "3"
+        },
+        {
+          "label": "b",
+          "optionText": "1"
+        },
+        {
+          "label": "c",
+          "optionText": "2"
+        },
+        {
+          "label": "d",
+          "optionText": "4"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "questionId": "1",
+      "questionText": "What is 2 + 2?",
+      "options": [
+        {
+          "label": "a",
+          "optionText": "3"
+        },
+        {
+          "label": "b",
+          "optionText": "4"
+        },
+        {
+          "label": "c",
+          "optionText": "5"
+        },
+        {
+          "label": "d",
+          "optionText": "6"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "questionId": "2",
+      "questionText": "What is 5 * 6?",
+      "options": [
+        {
+          "label": "a",
+          "optionText": "30"
+        },
+        {
+          "label": "b",
+          "optionText": "35"
+        },
+        {
+          "label": "c",
+          "optionText": "25"
+        },
+        {
+          "label": "d",
+          "optionText": "20"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "questionId": "3",
+      "questionText": "Capital of France?",
+      "options": [
+        {
+          "label": "a",
+          "optionText": "Madrid"
+        },
+        {
+          "label": "b",
+          "optionText": "Paris"
+        },
+        {
+          "label": "c",
+          "optionText": "Rome"
+        },
+        {
+          "label": "d",
+          "optionText": "Berlin"
         }
       ]
     }
